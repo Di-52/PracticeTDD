@@ -1,4 +1,4 @@
-package com.github.johnnysc.practicetdd
+package com.github.johnnysc.practicetdd.task013
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
