@@ -1,6 +1,106 @@
 package com.github.johnnysc.practicetdd
 
+import androidx.core.text.isDigitsOnly
+import kotlin.jvm.internal.Intrinsics.Kotlin
 import kotlin.math.pow
+
+interface ParserHandler {
+    fun handle(): Any
+}
+
+interface ParserChainFragment : ParserHandler {
+    fun canHandle(): Boolean
+}
+
+class ParserChainLink(
+    private val chain: ParserChainFragment,
+    private val nextChain: ParserHandler
+) : ParserHandler {
+
+    override fun handle(): Any = if (chain.canHandle())
+        chain.handle()
+    else
+        nextChain.handle()
+}
+
+class EmptyParser : ParserChainFragment {
+    override fun canHandle(): Boolean = true
+    override fun handle(): Any {
+        throw IllegalAccessException("This line is unreachable.")
+    }
+}
+
+class BoolenParser(
+    private val part: String
+) : ParserChainFragment {
+    override fun canHandle(): Boolean = part == "true" || part == "false"
+    override fun handle(): Any = part == "true"
+}
+
+class CharParser(
+    private val part: String
+) : ParserChainFragment {
+    override fun canHandle(): Boolean = part.length == 1
+    override fun handle(): Any = part[0]
+}
+
+class StringParser(
+    private val part: String
+) : ParserChainFragment {
+    override fun canHandle(): Boolean = true
+    override fun handle(): Any = part
+}
+
+class NumberParser(
+    private val part: String
+) : ParserChainFragment {
+    override fun canHandle(): Boolean =
+        part.replace("-", "")
+            .replace(".", "")
+            .replace("f", "")
+            .isDigitsOnly()
+
+    override fun handle(): Any {
+        val presentNumber = PresentNumber.Base(part)
+        return presentNumber.number()
+    }
+}
+
+interface PresentNumber {
+
+    fun number(): Number
+
+    class Base(private val part: String) : PresentNumber {
+        private val isNegative = part.contains('-')
+        private val isFloat = part.contains('.') || part.contains('f')
+        private val raw = part.replace("f", "").replace("-", "")
+        private val integerPart = mutableListOf<Int>()
+        private val floatPart = mutableListOf<Int>()
+
+        init {
+            var pointer = integerPart
+            raw.toCharArray().forEach {
+                when (it) {
+                    '1' -> pointer.add(1)
+                    '2' -> pointer.add(2)
+                    '3' -> pointer.add(3)
+                    '4' -> pointer.add(4)
+                    '5' -> pointer.add(5)
+                    '6' -> pointer.add(6)
+                    '7' -> pointer.add(7)
+                    '8' -> pointer.add(8)
+                    '9' -> pointer.add(9)
+                    '0' -> pointer.add(0)
+                    '.' -> pointer = floatPart
+                }
+            }
+        }
+
+        override fun number(): Number {
+            return 0
+        }
+    }
+}
 
 interface Parser {
 
@@ -16,86 +116,25 @@ interface Parser {
             val result: MutableList<Any> = mutableListOf()
             if (raw.isEmpty()) return result
             val parts: List<String> = raw.split(delimiter)
+
             parts.forEach {
-                if (it.isNotEmpty()) result.add(parsPart(it))
+                if (it.isNotEmpty()) result.add(
+                    ParserChainLink(
+                        CharParser(it),
+                        ParserChainLink(
+                            BoolenParser(it),
+                            ParserChainLink(
+                                NumberParser(it),
+                                ParserChainLink(
+                                    StringParser(it),
+                                    EmptyParser()
+                                )
+                            )
+                        )
+                    ).handle()
+                )
             }
             return result
         }
-
-        private fun parsPart(part: String): Any {
-            if (part.length == 1) {
-                val c = part.single()
-                if (c in '0'..'9')
-                    return c as Byte
-                return c
-            }
-            when (part) {
-                "false" -> return false
-                "true" -> return true
-            }
-            if (isNumber(part)) return parseNumber(part)
-            return part
-        }
-
-        private fun isNumber(s: String): Boolean {
-            s.forEach {
-                if (!isDigit(it) && it != '-' && it != '.' && it != 'f') return false
-            }
-            return true
-        }
-
-        private fun isDigit(c: Char): Boolean = if (c in '0'..'9') true else false
-
-        private fun parseNumber(s: String): Number {
-            var intResult: Long = 0
-            var floatResult: Double = 0.0
-            val isFloat = s.contains('.') || s.length > 18
-
-            val intPart = (if (isFloat) s.split('.')[0] else s).reversed()
-            if (!isFloat){
-                intPart.toCharArray().forEachIndexed { index, c ->
-                    intResult += getDigit(c) * Math.round(10.0.pow(index * 1.0))
-                }
-                if (intPart.contains('-')) intResult *= -1
-                when (intResult){
-                    in Byte.MIN_VALUE..Byte.MAX_VALUE -> return intResult.toByte()
-                    in Short.MIN_VALUE..Short.MAX_VALUE -> return intResult.toShort()
-                    in Int.MIN_VALUE..Int.MAX_VALUE -> return intResult.toInt()
-                    else -> return intResult
-                }
-            }
-            else {
-                intPart.toCharArray().forEachIndexed { index, c ->
-                    floatResult += getDigit(c) * 10.0.pow(index * 1.0)
-                }
-                if (s.contains('.')) {
-                    var floatPart = s.split('.')[1].reversed()
-                    floatPart.toCharArray().forEachIndexed { index, c ->
-                        floatResult += getDigit(c) * 0.1.pow(index * 1.0)
-                    }
-                }
-                floatResult += intResult
-                when(floatResult){
-                    in Float.MIN_VALUE..Float.MAX_VALUE -> return floatResult.toFloat()
-                    else -> return floatResult
-                }
-            }
-
-        }
-
-        private fun getDigit(c: Char): Int =
-            when (c) {
-                '0' -> 0
-                '1' -> 1
-                '2' -> 2
-                '3' -> 3
-                '4' -> 4
-                '5' -> 5
-                '6' -> 6
-                '7' -> 7
-                '8' -> 8
-                '9' -> 9
-                else -> 0
-            }
     }
 }
