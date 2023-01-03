@@ -1,5 +1,7 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task018.CustomObservable
+import com.github.johnnysc.practicetdd.task018.CustomObserver
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
