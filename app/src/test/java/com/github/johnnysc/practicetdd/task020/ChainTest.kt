@@ -1,5 +1,8 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task020.FeatureChain
+import com.github.johnnysc.practicetdd.task020.MessageUI
+import com.github.johnnysc.practicetdd.task020.ViewModelChain
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
