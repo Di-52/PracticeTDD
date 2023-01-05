@@ -1,4 +1,4 @@
-package com.github.johnnysc.practicetdd
+package com.github.johnnysc.practicetdd.task007
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
