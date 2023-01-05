@@ -1,5 +1,7 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task009.For
+import com.github.johnnysc.practicetdd.task009.Sorting
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

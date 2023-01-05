@@ -1,4 +1,4 @@
-package com.github.johnnysc.practicetdd
+package com.github.johnnysc.practicetdd.task009
 
 /**
  * @author Asatryan on 26.12.2022
