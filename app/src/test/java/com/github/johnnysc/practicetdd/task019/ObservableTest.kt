@@ -45,6 +45,7 @@ private class FakeUsualObserver : CustomObserver.Usual<Video>(), VideoObserver {
     override fun update(obj: Video) {
         this.obj = obj
     }
+
 }
 
 private class FakePremiumObserver : CustomObserver.Premium<Video>(), VideoObserver {
