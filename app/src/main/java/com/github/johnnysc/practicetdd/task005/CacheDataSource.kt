@@ -10,22 +10,22 @@ interface CacheDataSource {
     fun data(): List<SimpleData>
 
     class Timed(private val now: Now, private val lifeTimeMillis: Int = 1000) : CacheDataSource {
-        private var source: MutableMap<Long,SimpleData> = mutableMapOf()
+        private var source: MutableMap<Long, SimpleData> = mutableMapOf()
 
         override fun add(item: SimpleData) {
             source.put(now.now(), item)
         }
 
         override fun data(): List<SimpleData> {
-            val temp = mutableMapOf<Long,SimpleData>()
-            source.forEach {
-                if (now.now() - lifeTimeMillis < it.key) temp.put(it.key, it.value)
-            }
-            source=temp
+            val temp = mutableMapOf<Long, SimpleData>()
             val list = mutableListOf<SimpleData>()
-            source.forEach{
-                list.add(it.value)
+            source.forEach {
+                if (now.now() < it.key + lifeTimeMillis) {
+                    temp.put(it.key, it.value)
+                    list.add(it.value)
+                }
             }
+            source = temp
             return list
         }
     }

@@ -9,6 +9,7 @@ interface Now {
     fun now(): Long
 
     class Base() : Now {
-        override fun now(): Long = System.currentTimeMillis()
+        private val timeStart = System.currentTimeMillis()
+        override fun now(): Long = System.currentTimeMillis() - timeStart
     }
 }
