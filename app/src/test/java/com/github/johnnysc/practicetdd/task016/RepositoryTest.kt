@@ -1,5 +1,7 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task016.Api
+import com.github.johnnysc.practicetdd.task016.Repository
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
