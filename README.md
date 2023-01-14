@@ -54,3 +54,5 @@ task/022-rx-viewmodel RxJava2 простая цепочка и тест на Vie
 task/023-lambda юнит тесты с лямбдой как аргументом в конструкторе класса (https://youtu.be/KRpJPGGxmOs)
 
 task/024-messages-view-model вьюмодель сообщений из проекта ЕСР (рекомендуется решить сначала задачи 020 и 021) (https://youtu.be/gf-MIZIwm2E)
+
+task/025-paging вьюмодель с динамической подгрузкой следующего и предыдущего контента (https://youtu.be/zGYCcKtcSf4)
