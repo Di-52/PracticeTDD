@@ -1,4 +1,4 @@
-package com.github.johnnysc.practicetdd.task025
+package com.github.johnnysc.practicetdd.task026
 
 /**
  * @author Demitrist on 15.01.2023

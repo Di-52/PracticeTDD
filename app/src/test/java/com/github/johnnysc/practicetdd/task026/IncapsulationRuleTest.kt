@@ -1,4 +1,4 @@
-package com.github.johnnysc.practicetdd.task025
+package com.github.johnnysc.practicetdd.task026
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
