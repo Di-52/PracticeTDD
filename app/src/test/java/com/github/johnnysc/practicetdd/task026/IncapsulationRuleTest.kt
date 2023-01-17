@@ -1,4 +1,4 @@
-package com.github.johnnysc.practicetdd
+package com.github.johnnysc.practicetdd.task026
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -97,4 +97,77 @@ class IncapsulationRuleTest {
             assertEquals(expected, actual)
         }
     }
+
+    @Test
+    fun `incaplsulation rule passed with funs`() {
+        val rule: GoodCodeRule = GoodCodeRule.Incapsulation()
+        val textList = listOf(
+            "package com.github.johnnysc.practicetdd.task026\n" +
+                    "\n" +
+                    "class TestClass(private val value: String) : TestInterface {\n" +
+                    "\n" +
+                    "    private var count = 0\n" +
+                    "\n" +
+                    "    override fun function(text: String, num: Int): Boolean {\n" +
+                    "        val i = 1\n" +
+                    "        return true\n" +
+                    "    }\n" +
+                    "}",
+            "package com.github.johnnysc.practicetdd.task026\n" +
+                    "\n" +
+                    "abstract class Abstract(private val resource: Resources) {\n" +
+                    "    \n" +
+                    "    protected abstract var name: String\n" +
+                    "    protected val count = 15\n" +
+                    "    abstract fun invoke(): String\n" +
+                    "\n" +
+                    "    fun fetchResource(id: Int): String {\n" +
+                    "        val isInvoke = false\n" +
+                    "        return count.toString()\n" +
+                    "    }\n" +
+                    "}"
+        )
+        textList.forEach {
+            val actual = rule.isValid(it)
+            val expected = true
+            assertEquals(expected, actual)
+        }
+    }
+
+    @Test
+    fun `incaplsulation rule not passed with funs`() {
+        val rule: GoodCodeRule = GoodCodeRule.Incapsulation()
+        val textList = listOf(
+            "package com.github.johnnysc.practicetdd.task026\n" +
+                    "\n" +
+                    "class TestClass(val value: String) : TestInterface {\n" +
+                    "\n" +
+                    "    var count = 0\n" +
+                    "\n" +
+                    "    override fun function(text: String, num: Int): Boolean {\n" +
+                    "        val i = 1\n" +
+                    "        return true\n" +
+                    "    }\n" +
+                    "}",
+            "package com.github.johnnysc.practicetdd.task026\n" +
+                    "\n" +
+                    "abstract class Abstract(private val resource: Resources) {\n" +
+                    "    \n" +
+                    "    abstract var name: String\n" +
+                    "    protected val count = 15\n" +
+                    "    abstract fun invoke(): String\n" +
+                    "\n" +
+                    "    fun fetchResource(id: Int): String {\n" +
+                    "        val isInvoke = false\n" +
+                    "        return count.toString()\n" +
+                    "    }\n" +
+                    "}"
+        )
+        textList.forEach {
+            val actual = rule.isValid(it)
+            val expected = false
+            assertEquals(expected, actual)
+        }
+    }
+
 }
