@@ -1,5 +1,8 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task027.MainViewModel
+import com.github.johnnysc.practicetdd.task027.MyObservable
+import com.github.johnnysc.practicetdd.task027.MyObserver
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
