@@ -8,7 +8,7 @@ interface GoodCodeRule {
 
     fun isValid(text: String):Boolean
 
-    class Incapsulation : GoodCodeRule {
+    class Encapsulation : GoodCodeRule {
         override fun isValid(text: String): Boolean =
             !text.contains(Regex("""(?<!(protected|private)\s)(val|var)"""))
     }
