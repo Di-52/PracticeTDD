@@ -6,15 +6,15 @@ package com.github.johnnysc.practicetdd.task026
 
 fun main() {
 
-    var str = "...place you code here..."
-    val inc = GoodCodeRule.Incapsulation()
+    val str = "...place you code here..."
+    val inc = GoodCodeRule.Encapsulation()
     println(inc.isValid(str))
 }
 
 interface GoodCodeRule {
     fun isValid(text: String): Boolean
 
-    class Incapsulation : GoodCodeRule {
+    class Encapsulation : GoodCodeRule {
         private val preparationCode = PreparationCode()
 
         override fun isValid(text: String): Boolean {

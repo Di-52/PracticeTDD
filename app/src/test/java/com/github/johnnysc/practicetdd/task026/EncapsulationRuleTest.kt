@@ -6,11 +6,11 @@ import org.junit.Test
 /**
  * @author Asatryan on 15.01.2023
  */
-class IncapsulationRuleTest {
+class EncapsulationRuleTest {
 
     @Test
-    fun `incapsulation rule passed`() {
-        val rule: GoodCodeRule = GoodCodeRule.Incapsulation()
+    fun `encapsulation rule passed`() {
+        val rule: GoodCodeRule = GoodCodeRule.Encapsulation()
         val textList = listOf(
             "package com.github.johnnysc.practicetdd\n" +
                     "\n" +
@@ -51,8 +51,8 @@ class IncapsulationRuleTest {
     }
 
     @Test
-    fun `incapsulation rule not passed`() {
-        val rule: GoodCodeRule = GoodCodeRule.Incapsulation()
+    fun `encapsulation rule not passed`() {
+        val rule: GoodCodeRule = GoodCodeRule.Encapsulation()
         val textList = listOf(
             "package com.github.johnnysc.practicetdd\n" +
                     "\n" +
@@ -99,8 +99,8 @@ class IncapsulationRuleTest {
     }
 
     @Test
-    fun `incaplsulation rule passed with funs`() {
-        val rule: GoodCodeRule = GoodCodeRule.Incapsulation()
+    fun `encapsulation rule passed with fun`() {
+        val rule: GoodCodeRule = GoodCodeRule.Encapsulation()
         val textList = listOf(
             "package com.github.johnnysc.practicetdd.task026\n" +
                     "\n" +
@@ -135,8 +135,8 @@ class IncapsulationRuleTest {
     }
 
     @Test
-    fun `incaplsulation rule not passed with funs`() {
-        val rule: GoodCodeRule = GoodCodeRule.Incapsulation()
+    fun `encapsulation rule not passed with fun`() {
+        val rule: GoodCodeRule = GoodCodeRule.Encapsulation()
         val textList = listOf(
             "package com.github.johnnysc.practicetdd.task026\n" +
                     "\n" +
