@@ -1,9 +1,5 @@
 package com.github.johnnysc.practicetdd
 
-import androidx.core.text.isDigitsOnly
-import kotlin.jvm.internal.Intrinsics.Kotlin
-import kotlin.math.pow
-
 interface ParserHandler {
     fun handle(): Any
 }
@@ -14,7 +10,7 @@ interface ParserChainFragment : ParserHandler {
 
 class ParserChainLink(
     private val chain: ParserChainFragment,
-    private val nextChain: ParserHandler
+    private val nextChain: ParserHandler,
 ) : ParserHandler {
 
     override fun handle(): Any = if (chain.canHandle())
@@ -31,34 +27,31 @@ class EmptyParser : ParserChainFragment {
 }
 
 class BoolenParser(
-    private val part: String
+    private val part: String,
 ) : ParserChainFragment {
     override fun canHandle(): Boolean = part == "true" || part == "false"
     override fun handle(): Any = part == "true"
 }
 
 class CharParser(
-    private val part: String
+    private val part: String,
 ) : ParserChainFragment {
     override fun canHandle(): Boolean = part.length == 1
     override fun handle(): Any = part[0]
 }
 
 class StringParser(
-    private val part: String
+    private val part: String,
 ) : ParserChainFragment {
     override fun canHandle(): Boolean = true
     override fun handle(): Any = part
 }
 
 class NumberParser(
-    private val part: String
+    private val part: String,
 ) : ParserChainFragment {
     override fun canHandle(): Boolean =
-        part.replace("-", "")
-            .replace(".", "")
-            .replace("f", "")
-            .isDigitsOnly()
+        """(-)?\d*(\.\d)?""".toRegex().matches(part)
 
     override fun handle(): Any {
         val presentNumber = PresentNumber.Base(part)
@@ -72,7 +65,6 @@ interface PresentNumber {
 
     class Base(private val part: String) : PresentNumber {
         private val isNegative = part.contains('-')
-        private val isFloat = part.contains('.') || part.contains('f')
         private val raw = part.replace("f", "").replace("-", "")
         private val integerPart = mutableListOf<Int>()
         private val floatPart = mutableListOf<Int>()
@@ -97,7 +89,25 @@ interface PresentNumber {
         }
 
         override fun number(): Number {
-            return 0
+            var value: Double = 0.0
+            var num: Number = 0
+
+            integerPart.reversed().forEachIndexed { index, element ->
+                value += element * Math.pow(10.0, index * 1.0)
+            }
+            if (isNegative) value *= -1
+            var result: Number = value
+            if (value.compareTo(Byte.MIN_VALUE) > 0 && value.compareTo(Byte.MAX_VALUE) < 0)
+                result = value.toInt().toShort().toByte()
+            else if (value.compareTo(Short.MIN_VALUE) > 0 && value.compareTo(Short.MAX_VALUE) < 0)
+                result = value.toInt().toShort()
+            else if (value.compareTo(Int.MIN_VALUE) > 0 && value.compareTo(Int.MAX_VALUE) < 0)
+                result = value.toInt()
+            else if (value.compareTo(Long.MIN_VALUE) > 0 && value.compareTo(Long.MAX_VALUE) < 0)
+                result = value.toLong()
+            else if (value.compareTo(Float.MIN_VALUE) > 0 && value.compareTo(Float.MAX_VALUE) < 0)
+                result = value.toFloat()
+            return result
         }
     }
 }
@@ -134,7 +144,7 @@ interface Parser {
                     ).handle()
                 )
             }
-            return result
+            return result.toList()
         }
     }
 }
