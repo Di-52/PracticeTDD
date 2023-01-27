@@ -1,5 +1,9 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task023.HandleInteraction
+import com.github.johnnysc.practicetdd.task023.Interaction
+import com.github.johnnysc.practicetdd.task023.Legacy
+import com.github.johnnysc.practicetdd.task023.LegacyObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
