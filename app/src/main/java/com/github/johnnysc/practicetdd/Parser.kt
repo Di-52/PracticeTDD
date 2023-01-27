@@ -89,12 +89,15 @@ interface PresentNumber {
         }
 
         override fun number(): Number {
-            var value: Double = 0.0
-            var num: Number = 0
+            var value = 0.0
 
             integerPart.reversed().forEachIndexed { index, element ->
                 value += element * Math.pow(10.0, index * 1.0)
             }
+            floatPart.reversed().forEachIndexed { index, element ->
+                value += element / Math.pow(10.0, index * 1.0)
+            }
+
             if (isNegative) value *= -1
             var result: Number = value
             if (value.compareTo(Byte.MIN_VALUE) > 0 && value.compareTo(Byte.MAX_VALUE) < 0)
