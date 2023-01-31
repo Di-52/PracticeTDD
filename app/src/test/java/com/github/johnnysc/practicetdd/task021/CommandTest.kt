@@ -1,5 +1,9 @@
 package com.github.johnnysc.practicetdd
 
+import com.github.johnnysc.practicetdd.task021.Command
+import com.github.johnnysc.practicetdd.task021.IsEmptyHandleUseCase
+import com.github.johnnysc.practicetdd.task021.MessageUI
+import com.github.johnnysc.practicetdd.task021.Parser
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
