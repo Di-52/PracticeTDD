@@ -1,5 +1,7 @@
 package com.github.johnnysc.practicetdd
 
+import kotlin.math.pow
+
 interface ParserHandler {
     fun handle(): Any
 }
@@ -51,7 +53,7 @@ class NumberParser(
     private val part: String,
 ) : ParserChainFragment {
     override fun canHandle(): Boolean =
-        """(-)?\d*(\.\d)?""".toRegex().matches(part)
+        "-?[0-9]*(([.]+[0-9]*)|f)?".toRegex().matches(part)
 
     override fun handle(): Any {
         val presentNumber = PresentNumber.Base(part)
@@ -84,33 +86,41 @@ interface PresentNumber {
                     '9' -> pointer.add(9)
                     '0' -> pointer.add(0)
                     '.' -> pointer = floatPart
+                    'f' -> {
+                        pointer = floatPart
+                        pointer.add(0)
+                    }
                 }
             }
         }
 
         override fun number(): Number {
-            var value = 0.0
-
-            integerPart.reversed().forEachIndexed { index, element ->
-                value += element * Math.pow(10.0, index * 1.0)
+            if (floatPart.isEmpty() && integerPart.size < 20) {
+                var result: Long = 0L
+                integerPart.reversed().forEachIndexed { index, element ->
+                    result += (element * 10.0.pow(index)).toLong()
+                }
+                if (isNegative) result *= -1
+                if (result >= Byte.MIN_VALUE && result <= Byte.MAX_VALUE)
+                    return result.toByte()
+                else if (result >= Short.MIN_VALUE && result <= Short.MAX_VALUE)
+                    return result.toShort()
+                else if (result >= Int.MIN_VALUE && result <= Int.MAX_VALUE)
+                    return result.toInt()
+                return result
+            } else {
+                var result = 0.0
+                integerPart.reversed().forEachIndexed { index, element ->
+                    result += element * 10.0.pow(index)
+                }
+                floatPart.reversed().forEachIndexed { index, element ->
+                    result += element / 10.0.pow(index)
+                }
+                if (isNegative) result *= -1
+                if (result.compareTo(Float.MIN_VALUE) > 0 && result.compareTo(Float.MAX_VALUE) < 0)
+                    return result.toFloat()
+                return result
             }
-            floatPart.reversed().forEachIndexed { index, element ->
-                value += element / Math.pow(10.0, index * 1.0)
-            }
-
-            if (isNegative) value *= -1
-            var result: Number = value
-            if (value.compareTo(Byte.MIN_VALUE) > 0 && value.compareTo(Byte.MAX_VALUE) < 0)
-                result = value.toInt().toShort().toByte()
-            else if (value.compareTo(Short.MIN_VALUE) > 0 && value.compareTo(Short.MAX_VALUE) < 0)
-                result = value.toInt().toShort()
-            else if (value.compareTo(Int.MIN_VALUE) > 0 && value.compareTo(Int.MAX_VALUE) < 0)
-                result = value.toInt()
-            else if (value.compareTo(Long.MIN_VALUE) > 0 && value.compareTo(Long.MAX_VALUE) < 0)
-                result = value.toLong()
-            else if (value.compareTo(Float.MIN_VALUE) > 0 && value.compareTo(Float.MAX_VALUE) < 0)
-                result = value.toFloat()
-            return result
         }
     }
 }
