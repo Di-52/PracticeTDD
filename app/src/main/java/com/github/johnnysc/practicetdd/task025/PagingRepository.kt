@@ -5,8 +5,8 @@ package com.github.johnnysc.practicetdd.task025
  **/
 
 interface PagingRepository {
-    fun messages(strategy: PagingRepository.Strategy): List<MessageDomain>
 
+    fun messages(strategy: Strategy): List<MessageDomain>
 
     interface Strategy{
         object INIT:Strategy
